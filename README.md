@@ -30,16 +30,16 @@ Book Catalog is a desktop application for managing your personal book collection
 ## Usage
 
 1. Open a terminal in the `Book_Catalog` directory.
-2. Run the application:
+1. Run the application:
 
-	```bash
-	python Book_Catalog.py
-	```
+     ```bash
+     python Book_Catalog.py
+     ```
 
-3. The GUI will open. Use the menu to:
-		 - **Find Books**: Search and filter your catalog. Edit or delete books from the results table.
-		 - **Add Book**: Enter details for a new book and add it to your catalog.
-		 - **Exit**: Close the application.
+1. The GUI will open. Use the menu to:
+   - **Find Books**: Search and filter your catalog. Edit or delete books from the results table.
+   - **Add Book**: Enter details for a new book and add it to your catalog.
+   - **Exit**: Close the application.
 
 ### Adding a Book
 
