@@ -180,7 +180,7 @@ class BookCatalogApp(tk.Tk):
         def sort_tree(col):
             data = [(tree.set(child, col), child) for child in tree.get_children('')]
             if col in ["ID", "Rating"]:
-                data = [(int(d[0]) if d[0] != "N/A" else 0, d[1]) for d in data]
+                data = [(int(d[0]) if d[0] != "N/A" else 0, d[1]) for d in data] # type: ignore
             data.sort(reverse=current_sort["reverse"])
             for index, (_, iid) in enumerate(data):
                 tree.move(iid, '', index)
