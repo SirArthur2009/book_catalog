@@ -2,8 +2,18 @@ import sqlite3
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 import csv
+import os
+import sys
 
-FILENAME = r"C:\Users\levig\OneDrive\Documents\Coding\book_database.db"
+
+if getattr(sys, 'frozen', False):
+    # running as exe
+    BASE_DIR = os.path.dirname(sys.executable)
+else:
+    # running as python
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+FILENAME = os.path.join(BASE_DIR, "book_database.db")
 
 # ========== Database Functions ==========
 def init_db():
@@ -11,14 +21,15 @@ def init_db():
         c = conn.cursor()
         c.execute('''
             CREATE TABLE IF NOT EXISTS books (
-                id INTEGER PRIMARY KEY, 
-                title TEXT, 
-                author TEXT, 
-                location TEXT, 
-                readBefore BOOLEAN, 
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                author TEXT NOT NULL,
+                location TEXT NOT NULL,
+                readBefore INTEGER DEFAULT 0,
                 rating INTEGER
             )
         ''')
+        conn.commit()
 
 def log_book(title, author, location, read_before=False, rating=None):
     with sqlite3.connect(FILENAME) as conn:
@@ -26,7 +37,8 @@ def log_book(title, author, location, read_before=False, rating=None):
         c.execute('''
             INSERT INTO books (title, author, location, readBefore, rating)
             VALUES (?, ?, ?, ?, ?)
-        ''', (title, author, location, read_before, rating))
+        ''', (title, author, location, int(read_before), rating))
+        conn.commit()
 
 def get_all_books():
     with sqlite3.connect(FILENAME) as conn:
