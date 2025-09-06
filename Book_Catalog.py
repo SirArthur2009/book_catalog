@@ -63,13 +63,22 @@ class BookCatalogApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Book Catalog")
-        self.geometry("850x550")
-        self.resizable(False, False)
+        self.geometry("950x600")
+        self.resizable(True, True)
         self.start_menu()
 
     def clear_frame(self):
         for widget in self.winfo_children():
             widget.destroy()
+
+    # ===== Auto-resize columns =====
+    def auto_resize_columns(self, tree):
+        def resize(event):
+            total_width = event.width
+            col_width = max(int(total_width / len(tree["columns"])) - 1, 50)
+            for col in tree["columns"]:
+                tree.column(col, width=col_width)
+        tree.bind("<Configure>", resize)
 
     # ========== Start Menu ==========
     def start_menu(self):
@@ -133,7 +142,7 @@ class BookCatalogApp(tk.Tk):
         tk.Label(self, text="Find Books", font=("Arial", 20)).pack(pady=10)
 
         search_frame = tk.Frame(self)
-        search_frame.pack(pady=5)
+        search_frame.pack(pady=5, fill=tk.X)
 
         tk.Label(search_frame, text="Keyword:").grid(row=0, column=0, padx=5)
         keyword_var = tk.StringVar()
@@ -146,13 +155,25 @@ class BookCatalogApp(tk.Tk):
         read_filter.grid(row=0, column=3, padx=5)
 
         columns = ("ID", "Title", "Author", "Location", "ReadBefore", "Rating")
-        tree = ttk.Treeview(self, columns=columns, show="headings", height=18)
+        tree_frame = tk.Frame(self)
+        tree_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+
+        tree = ttk.Treeview(tree_frame, columns=columns, show="headings")
         tree.tag_configure('evenrow', background='#f2f2f2')
         tree.tag_configure('oddrow', background='#ffffff')
         for col in columns:
             tree.heading(col, text=col, command=lambda _col=col: sort_tree(_col))
-            tree.column(col, width=100 if col=="ID" else 130)
-        tree.pack(pady=10, fill=tk.X)
+            tree.column(col, width=100 if col=="ID" else 130, anchor="center")
+        tree.grid(row=0, column=0, sticky="nsew")
+
+        vsb = ttk.Scrollbar(tree_frame, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=vsb.set)
+        vsb.grid(row=0, column=1, sticky="ns")
+
+        tree_frame.grid_rowconfigure(0, weight=1)
+        tree_frame.grid_columnconfigure(0, weight=1)
+
+        self.auto_resize_columns(tree)
 
         current_sort = {"column": None, "reverse": False}
 
@@ -178,11 +199,10 @@ class BookCatalogApp(tk.Tk):
                 tag = 'evenrow' if idx % 2 == 0 else 'oddrow'
                 tree.insert("", "end", values=(b[0], b[1], b[2], b[3], "Yes" if b[4] else "No", b[5] if b[5] else "N/A"), tags=(tag,))
 
-        # Bind live updates
         keyword_var.trace_add("write", update_tree)
         read_filter.bind("<<ComboboxSelected>>", lambda e: update_tree())
 
-        # ========== Button Functions ==========
+        # ===== Button Functions =====
         def edit_selected():
             selected = tree.selection()
             if not selected:
@@ -234,7 +254,7 @@ class BookCatalogApp(tk.Tk):
             messagebox.showinfo("Import Complete", f"Imported {imported} books from CSV.")
             update_tree()
 
-        # ========== Buttons ==========
+        # ===== Buttons =====
         tk.Button(search_frame, text="Edit Selected", command=edit_selected, width=12).grid(row=1, column=0, pady=5)
         tk.Button(search_frame, text="Import CSV", command=import_books, width=12).grid(row=1, column=1, pady=5)
         tk.Button(search_frame, text="Export", command=export_books, width=12).grid(row=1, column=2, pady=5)
