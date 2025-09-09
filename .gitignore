@@ -1,0 +1,5 @@
+dist/
+build/
+__pycache__/
+BookCatalog.spec
+book_database.db

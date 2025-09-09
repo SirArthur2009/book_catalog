@@ -21,7 +21,20 @@ Book Catalog is a desktop application for managing your personal book collection
 - Tkinter (included with standard Python)
 - SQLite3 (included with standard Python)
 
-## Setup
+## Setup & Installation
+
+### Standalone EXE Release
+
+Book Catalog is available as a standalone Windows executable. The installer will automatically install Python if it is not already present on your system—no manual setup required.
+
+1. Download the latest release from the [GitHub Releases page](https://github.com/SirArthur2009/book_catalog/releases).
+2. Run the app (`BookCatalog.exe`).
+3. It might take a minute on first run.
+4. It should load the program, and run as normal. It will create a database called book_database which stores all your books. This HAS to be in the same folder as the exe
+
+### For Developers
+
+If you want to run or modify the source code:
 
 1. Clone or download this repository.
 2. Ensure you have Python 3.11+ installed.
@@ -29,17 +42,24 @@ Book Catalog is a desktop application for managing your personal book collection
 
 ## Usage
 
+### If using the EXE release
+
+Simply launch Book Catalog from your Start Menu or desktop shortcut. The GUI will open and you can begin managing your books immediately.
+
+### If running from source
+
 1. Open a terminal in the `Book_Catalog` directory.
 1. Run the application:
 
-     ```bash
-     python Book_Catalog.py
-     ```
+  ```bash
+  python main.py
+  ```
 
 1. The GUI will open. Use the menu to:
-   - **Find Books**: Search and filter your catalog. Edit or delete books from the results table.
-   - **Add Book**: Enter details for a new book and add it to your catalog.
-   - **Exit**: Close the application.
+
+- **Find Books**: Search and filter your catalog. Edit or delete books from the results table.
+- **Add Book**: Enter details for a new book and add it to your catalog.
+- **Exit**: Close the application.
 
 ### Adding a Book
 
@@ -63,7 +83,7 @@ Book Catalog is a desktop application for managing your personal book collection
 ## Database
 
 - The database file is located at:
-  `C:/Users/levig/OneDrive/Documents/Coding/book_database.db`
+  `<path to your file> + book_database.db`
 - All book data is stored in the `books` table.
 
 ## Troubleshooting
@@ -94,8 +114,8 @@ Keyword: Dune
 Filter by Read: Yes
 Results:
 | ID | Title | Author        | Location | ReadBefore | Rating |
-|----|-------|--------------|----------|------------|--------|
-| 1  | Dune  | Frank Herbert| Shelf 2  | Yes        | 9      |
+|----|-------|---------------|----------|------------|--------|
+| 1  | Dune  |  Frank Herbert| Shelf 2  | Yes        | 9      |
 
 Edit Book:
 Change rating to 10, click Save Changes.
